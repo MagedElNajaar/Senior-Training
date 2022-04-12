@@ -1,4 +1,4 @@
-// Problem Link: https://vjudge.net/problem/SPOJ-NHAY
+//https://vjudge.net/contest/488773#problem/A
 #include<bits/stdc++.h>
 #define FIO ios_base::sync_with_stdio(0);cin.tie(0);
 using namespace std;
