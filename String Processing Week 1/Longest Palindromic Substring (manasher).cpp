@@ -1,4 +1,4 @@
-// problem link: https://vjudge.net/problem/SPOJ-LPS
+//https://vjudge.net/contest/488773#problem/F
 #include<bits/stdc++.h>
 #include<ext/numeric>
 #define FIO ios_base::sync_with_stdio(0);cin.tie(0);
