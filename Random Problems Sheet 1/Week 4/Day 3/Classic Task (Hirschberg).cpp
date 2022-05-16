@@ -1,3 +1,6 @@
+//https://csacademy.com/contest/archive/task/classic-task/
+
+
 #include <bits/stdc++.h>
 
 using namespace std;
