@@ -1,0 +1,40 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+3,M=1e5+3;
+int n;
+int head[N],nxt[M],to[M],ne;
+void init(){
+    memset(head,-1,n* sizeof(head[0]));
+    ne=0;
+}
+void addEdg(int f,int t){
+    to[ne]=t;
+    nxt[ne]=head[f];
+    head[f]=ne++;
+}
+void addBiEdg(int u,int v){
+    addEdg(u,v);
+    addEdg(v,u);
+}
+bool vis[N];
+int dfs(int u){
+    if(vis[u]) return 0;
+    vis[u]= true;
+    int ret=1;
+    for (int e = head[u]; ~e; e=nxt[e])
+        ret+=dfs(to[e]);
+    return ret;
+}
+int main() {
+    int m;
+    cin>>n>>m;
+    init();
+    for (int i = 0; i <m ; ++i) {
+        int u,v;
+        cin>>u>>v;
+        addBiEdg(--u,--v);
+    }
+    if(n==m+1&&dfs(0)==n)
+        cout<<"YES\n";
+    else cout<<"NO\n";
+}
