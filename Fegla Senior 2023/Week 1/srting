@@ -1,0 +1,31 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+3,Q=1e5+3;
+char v[Q];
+int nxt[Q],s[N],sz;
+void print(int id){
+    for (int i = s[id]; ~i ; i=nxt[i])
+        cout<<v[i];
+    cout<<'\n';
+}
+void add(int id,char ch){
+    v[sz]=ch;
+    nxt[sz]=s[id];
+    s[id]=sz++;
+}
+int main() {
+    int n,q;
+    cin>>n>>q;
+    memset(s,-1,n*sizeof(s[0]));
+    while(q--){
+        int typ,id;
+        cin>>typ>>id;
+        if(typ)
+            print(id);
+        else{
+            char ch;
+            cin>>ch;
+            add(id,ch);
+        }
+    }
+}
