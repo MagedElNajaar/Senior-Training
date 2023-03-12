@@ -1,0 +1,40 @@
+//https://www.spoj.com/problems/ONEZERO/
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef vector<vector<int>> matrix;
+const int N=2e4+3,M=2e6+3,MOD=1e4;
+vector<tuple<int,int,int>>q;
+int vis[N],vid;
+void bfs(int m){
+    q={{1,-1,1}};
+    vis[1]=++vid;
+    if(m==1) return;
+    for (int f = 0; f <q.size() ; ++f) {
+        int s=get<0>(q[f]);
+        for (int d = 0; d <2 ; ++d) {
+            int ns=(s*10+d)%m;
+            if(vis[ns]==vid) continue;
+            vis[ns]=vid;
+            q.emplace_back(ns,f,d);
+            if(!ns) return;
+        }
+    }
+}
+void print(int idx){
+    if(~idx){
+        print(get<1>(q[idx]));
+        cout<<get<2>(q[idx]);
+    }
+}
+int main() {
+    int t;
+    cin>>t;
+    while(t--){
+        int m;
+        cin>>m;
+        bfs(m);
+        print(q.size()-1);
+        cout<<'\n';
+    }
+}
