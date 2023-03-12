@@ -1,0 +1,59 @@
+//https://vjudge.net/problem/SPOJ-KATHTHI
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef vector<vector<int>> matrix;
+const int N=1e3+3,M=2e6+3,MOD=1e4;
+char grid[N][N];
+int vis[N][N],vid,r,c,dis[N][N];
+bool valid(int i,int j){
+    return i>=0&&j>=0&&i<r&&j<c;
+}
+int bfs(){
+    deque<pair<int,int>>dq={{0,0}};
+    int s;
+    vis[0][0]=++vid;
+    for (int steps = 0; s=dq.size() ; ++steps) {
+        int i,j;
+        while(s--){
+            tie(i,j)=dq.front();
+            dq.pop_front();
+            if(i==r-1&&j==c-1) return steps;
+            if(dis[i][j] !=steps) continue;
+            int di=0,dj=-1;
+            for (int k = 0; k <4 ; ++k) {
+                int ni=i+di,nj=j+dj;
+                if(valid(ni,nj)) {
+                    int S = steps +(grid[i][j] != grid[ni][nj]);
+                    if (vis[ni][nj] != vid || S < dis[ni][nj]) {
+                        vis[ni][nj] = vid;
+                        dis[ni][nj] = S;
+                        if (grid[i][j] == grid[ni][nj]) {
+                            ++s;
+                            dq.emplace_front(ni, nj);
+                        } else dq.emplace_back(ni, nj);
+                    }
+                }
+                swap(di,dj);
+                if(k==1) dj=1;
+            }
+
+        }
+    }
+}
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    int t;
+    cin>>t;
+    while(t--){
+        cin>>r>>c;
+        for (int i = 0; i <r ; ++i) {
+            for (int j = 0; j <c ; ++j) {
+                cin>>grid[i][j];
+            }
+        }
+        cout<<bfs()<<'\n';
+    }
+}
