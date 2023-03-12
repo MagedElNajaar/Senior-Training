@@ -1,0 +1,55 @@
+//https://www.spoj.com/problems/BUGLIFE/
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define neig(u,v,e) for (int e = head[u],v; ~e&&(v=to[e],1) ; e=nxt[e])
+const int N=2e3+3,M=2e6+3,MOD=1e4;
+int head[N],to[M],nxt[M],ne,n;
+void AddEdg(int f,int t){
+    to[ne]=t;
+    nxt[ne]=head[f];
+    head[f]=ne++;
+}
+void init(){
+    memset(head,-1,n*sizeof(head[0]));
+    ne=0;
+}
+void AddBiEdg(int u,int v){
+    AddEdg(u,v);
+    AddEdg(v,u);
+}
+ 
+int vis[N];
+bool dfs(int u,int c){
+    if(vis[u]) return vis[u]==c;
+    vis[u]=c;
+    bool ret= true;
+    neig(u,v,e){
+        ret&=dfs(v,3-c);
+    }
+    return ret;
+}
+int main() {
+    int t=0,tc;
+    int m;
+    cin>>tc;
+    while(tc--){
+        cout<<"Scenario #"<<++t<<":\n";
+        cin>>n>>m;
+        init();
+        memset(vis,0,n*sizeof (vis[0]));
+        while(m--){
+            int u,v;
+            cin>>u>>v;
+            AddBiEdg(--u,--v);
+        }
+        bool ret= true;
+        for (int i = 0; i <n ; ++i) {
+            if(!vis[i])
+                ret&=dfs(i,1);
+        }
+        if(ret)
+            cout<<"No suspicious bugs found!\n";
+        else cout<<"Suspicious bugs found!\n";
+    }
+}
