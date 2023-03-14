@@ -1,0 +1,77 @@
+//https://vjudge.net/problem/UVA-10441
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const int N = 128, M = 1e3+3, MOD = 1e4;
+int head[N],nxt[M],to[M],ne,n=128,idx[M],Deg[N];
+char str[M][21];
+void AddEdg(int f,int t){
+    to[ne]=t;
+    nxt[ne]=head[f];
+    head[f]=ne++;
+}
+int res[M],sz;
+void init(){
+    memset(head,-1,n* sizeof(head[0]));
+    memset(Deg,0,n* sizeof(Deg[0]));
+    ne=0;
+}
+void euler(int u){
+    for (int &e = head[u]; ~e; ) {
+        int ee=e;
+        e=nxt[e];
+        euler(to[ee]);
+        res[sz++]=ee;
+
+    }
+}
+int main() {
+    int t;
+    cin>>t;
+    while(t--){
+        init();
+        int m;
+        cin>>m;
+        for (int i = 0; i <m ; ++i) {
+            cin>>str[i];
+            idx[i]=i;
+        }
+        sort(idx,idx+m,[](int a,int b){
+            return strcmp(str[a],str[b])<0;
+        });
+        int mn='z';
+        for (int i = m-1; ~i  ; --i) {
+            int j=idx[i];
+            int l=strlen(str[j])-1;
+            int u=str[j][0],v=str[j][l];
+            mn=min({mn,u,v});
+            AddEdg(u,v);
+            Deg[u]++;
+            Deg[v]--;
+        }
+        int cntOne=0,cntNeg=0,cntElse=0;
+        for (int i = 'a'; i <='z' ; ++i) {
+            switch (Deg[i]) {
+                case 1:cntOne++,mn=i;break;
+                case -1:cntNeg++;break;
+                case 0:break;
+                default :cntElse++;
+            }
+        }
+        if(cntOne>1||cntNeg>1||cntElse>0){
+            cout<<"***\n";
+            continue;
+        }
+        sz=0;
+        euler(mn);
+        if(sz!=m) {
+            cout<<"***\n";
+            continue;
+        }
+        while(sz--){
+            int id=m-res[sz]-1;
+            cout<<str[idx[id]]<<".\n"[!sz];
+        }
+
+    }
+}
