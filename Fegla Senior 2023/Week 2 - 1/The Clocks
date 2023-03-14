@@ -1,0 +1,56 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const int N = 5e1 + 3, M = 2e4 + 3, MOD = 1e4;
+string ops[] = {"ABDE",
+                "ABC",
+                "BCEF",
+                "ADG",
+                "BDEFH",
+                "CFI",
+                "DEGH",
+                "GHI",
+                "EFHI"};
+vector<int>sol,cur;
+int vis[1<<18],vid;
+bool dfs(int s,int j){
+    if(!s) {
+        sol=cur;
+        return true;
+    }
+    if(vis[s]==vid) return false;
+    vis[s]=vid;
+    for (int i = j; i <9 ; ++i) {
+
+        int ns=s;
+        for(auto c:ops[i]){
+            c-='A';
+            ns&=~(3<<(2*c));
+            int x=(s>>(2*c))&3;
+            x=++x&3;
+            ns|=x<<(2*c);
+        }
+        cur.push_back(i+1);
+        bool f=dfs(ns,i);
+        cur.pop_back();
+        if(f)
+            return true;
+
+    }
+    return false;
+}
+void solve(int s){
+    vid++;
+    dfs(s,0);
+}
+int main() {
+    int x,s=0;
+    for (int i = 0; i <9 ; ++i) {
+        cin>>x;
+        s|=x<<(2*i);
+    }
+    solve(s);
+    for(auto &x: sol){
+        cout<<x<<" \n"[&x==&sol.back()];
+    }
+}
