@@ -1,0 +1,59 @@
+//https://vjudge.net/problem/%E6%B4%9B%E8%B0%B7-P2731
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const int N = 3e3 + 3, M = 2e4 + 3, MOD = 1e4;
+int head[N],nxt[N],to[N],ne,n=501,u[N],v[N],idx[N];
+bool EvenDeg[N];
+void AddEdg(int f,int t){
+    to[ne]=t;
+    nxt[ne]=head[f];
+    head[f]=ne++;
+}
+void AddBiEdg(int u,int v){
+    AddEdg(u,v);
+    AddEdg(v,u);
+}
+bool vis[N];
+int res[N],sz;
+void euler(int u){
+    for (int &e = head[u]; ~e;) {
+        int ee=e;
+        e = nxt[e];
+        if(vis[ee]) continue;
+        vis[ee^1]=1;
+        euler(to[ee]);
+    }
+    res[sz++]=u;
+
+}
+void init(){
+    memset(head,-1,n* sizeof(head[0]));
+    ne=0;
+}
+int main() {
+    init();
+    int m,a,b,mn=501;
+    cin>>m;
+    for (int i = 0; i <m ; ++i) {
+        cin>>a>>b;
+        EvenDeg[a]^=1;
+        EvenDeg[b]^=1;
+        mn=min({mn,a,b});
+        u[i]=min(a,b);
+        v[i]=max(a,b);
+        idx[i]=i;
+    }
+    sort(idx,idx+m,[](int a,int b){
+        return tie(u[a],v[a])<tie(u[b],v[b]);
+    });
+    while(m--)
+        AddBiEdg(u[idx[m]],v[idx[m]]);
+    int i=find(EvenDeg,EvenDeg+501,1)-EvenDeg;
+    if(i==501) i=mn;
+    euler(i);
+    while(sz--){
+        cout<<res[sz]<<'\n';
+    }
+
+}
