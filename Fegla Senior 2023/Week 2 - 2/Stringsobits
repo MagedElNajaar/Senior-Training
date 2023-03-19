@@ -1,0 +1,29 @@
+//https://vjudge.net/problem/%E6%B4%9B%E8%B0%B7-P2727
+#include<bits/stdc++.h>
+using namespace std;
+#define neig(u,v,e) for(int e=head[u],v;~e&&(v=to[e],1);e=nxt[e])
+typedef long long ll;
+const int N=15,M=2e5+3,MOD=1e4;
+int n,L,mem[32][32];
+ll I;
+int sol(int o,int len){
+    if(!o) return 1;
+    if(!len) return 1;
+    int &ret=mem[o][len];
+    if(~ret)
+        return ret;
+    return ret=sol(o-1,len-1)+sol(o,len-1);
+}
+int main() {
+    cin>>n>>L>>I;
+    memset(mem,-1,sizeof (mem));
+    --I;
+    while(n--){
+        int x=sol(L,n);
+        if(x<=I)
+            cout<<'1',--L,I-=x;
+        else cout<<'0';
+    }
+    cout<<'\n';
+
+}
