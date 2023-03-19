@@ -1,0 +1,47 @@
+//https://www.spoj.com/problems/HIST2/
+#include<bits/stdc++.h>
+using namespace std;
+#define neig(u,v,e) for(int e=head[u],v;~e&&(v=to[e],1);e=nxt[e])
+typedef long long ll;
+const int N=15,M=2e5+3,MOD=1e4;
+int n,mem[1<<N][N+1],h[N+1];
+ll mem2[1<<N][N+1];
+int solve(int mask,int pre){
+    if(mask==(1<<n)-1)
+        return h[pre];
+    int &ret=mem[mask][pre];
+    if(~ret)
+        return ret;
+    ret=0;
+    for (int i = 1; i <=n ; ++i) {
+        if((mask>>(i-1))&1) continue;
+        int cur=abs(h[i]-h[pre])+2;
+        ret=max(ret,cur+solve(mask|(1<<(i-1)),i));
+    }
+    return ret;
+}
+ll count(int mask,int pre){
+    if(mask==(1<<n)-1)
+        return 1;
+    ll &ret=mem2[mask][pre];
+    if(~ret)
+        return ret;
+    ret=0;
+    int ans= solve(mask,pre);
+    for (int i = 1; i <=n ; ++i) {
+        if((mask>>(i-1))&1) continue;
+        int cur=abs(h[i]-h[pre])+2;
+        if(ans==cur+solve(mask|(1<<(i-1)),i))
+            ret+=count(mask|(1<<(i-1)),i);
+    }
+    return ret;
+}
+int main() {
+    while(cin>>n,n){
+        for (int i = 1; i <=n ; ++i)
+            cin>>h[i];
+        memset(mem,-1,sizeof (mem));
+        memset(mem2,-1,sizeof (mem2));
+        cout<<solve(0,0)<<' '<<count(0,0)<<'\n';
+    }
+} 
