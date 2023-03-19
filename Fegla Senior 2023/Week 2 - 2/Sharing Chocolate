@@ -1,0 +1,53 @@
+//https://vjudge.net/problem/UVA-1099
+#include<bits/stdc++.h>
+using namespace std;
+#define neig(u,v,e) for(int e=head[u],v;~e&&(v=to[e],1);e=nxt[e])
+typedef long long ll;
+const int N=15,M=1e2+3,MOD=1e4;
+int area[1<<N],arr[N],mem[1<<N][M];
+bool sol(int mask,int w){
+    int h=area[mask]/w;
+    if(h>w)
+        swap(w,h);
+    if(!(mask&(mask-1)))
+        return 1;
+    int &ret=mem[mask][w];
+    if(~ret)
+        return ret;
+    ret=0;
+    
+    for (int i = (mask-1)&mask; !ret&&i; i=(i-1)&mask) {
+        int j=(~i&mask);
+        if(j>i) break;
+        if(area[i]%w==0)
+            ret|= sol(i,w)&&sol(j,w);
+        if(area[i]%h==0)
+            ret|= sol(i,h)&&sol(j,h);
+    }
+    return ret;
+}
+int main() {
+    int n, w, h,t=0;
+    while (cin >> n, n) {
+        cout<<"Case "<<++t<<": ";
+        cin >> w >> h;
+        memset(mem, -1, sizeof(mem));
+        for (int i = 0; i < n; ++i)
+            cin >> arr[i];
+
+        for (int mask = 0; mask < (1 << n); ++mask) {
+            area[mask] = 0;
+            for (int i = 0; i < n; ++i) {
+                if ((mask >> i) & 1)
+                    area[mask] += arr[i];
+            }
+        }
+        if(area[(1<<n)-1]!=w*h){
+            cout<<"No\n";
+            continue;
+        }
+        if(sol((1<<n)-1,w))
+            cout<<"Yes\n";
+        else cout<<"No\n";
+    }
+}
