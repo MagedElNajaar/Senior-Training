@@ -1,0 +1,32 @@
+//https://vjudge.net/problem/SPOJ-MIXTURES
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const int N=1e2+1,M=1e3+3,MOD=1e4;
+int arr[N];
+pair<int,int>mem[N][N];
+pair<int,int> sol(int st,int ed){
+     if(st==ed)
+         return {0,arr[st]};
+     pair<int,int> &ret=mem[st][ed];
+     if(~ret.first)
+         return ret;
+     ret={1e9,0};
+    for (int i = st; i <ed ; ++i) {
+        auto p1=sol(st,i);
+        auto p2=sol(i+1,ed);
+        int sm=p1.first+p2.first+p1.second*p2.second;
+        int mk=(p1.second+p2.second)%100;
+        ret=min(ret,{sm,mk});
+    }
+    return ret;
+}
+int main() {
+    int n;
+    while(cin>>n){
+        for (int i = 0; i <n ; ++i)
+            cin>>arr[i];
+        memset(mem,-1,sizeof (mem));
+        cout<<sol(0,n-1).first<<'\n';
+    }
+} 
