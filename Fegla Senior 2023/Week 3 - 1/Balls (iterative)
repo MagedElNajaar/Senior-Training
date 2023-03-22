@@ -1,0 +1,35 @@
+//https://vjudge.net/problem/UESTC-353
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const int N=1e3+3,M=5e1+3,MOD=1e4;
+int mem[N][2],H,B;
+int sol(){
+    for (int b = 1; b <=B ; ++b) {
+        int i = 1;
+        for (int h = 0; h <=H ; ++h) {
+            int &ret=mem[h][b&1];
+            if(b==1||!h) {
+                ret= h;
+                continue;
+            }
+            ret=1e9;
+            for (; i <=h ; ++i)
+                if(mem[i-1][(b-1)&1]>=mem[h-i][b&1]) {
+                    ret = 1 + mem[i - 1][(b - 1) & 1];
+                    break;
+                }
+        }
+    }
+    return mem[H][B&1];
+}
+int main() {
+    int t;
+    cin>>t;
+    memset(mem,-1,sizeof (mem));
+    while(t--){
+        int tc;
+        cin>>tc>>B>>H;
+        cout<<tc<<' '<<sol()<<'\n';
+    }
+}
