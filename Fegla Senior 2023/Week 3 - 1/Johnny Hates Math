@@ -1,0 +1,52 @@
+//https://vjudge.net/problem/EOlymp-1634
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef unordered_map<int,int> Hash;
+const int N=257,M=5e1+3,MOD=1e4;
+Hash mem[N];
+char str[N];
+int l;
+int sol(int i,int rem){
+    if(i==l) return rem?1e9:0;
+    if(str[i]=='0') return 1e9;
+    int &ret=mem[i].emplace(rem,-1).first->second;
+    if(~ret)
+        return ret;
+    ret=1e9;
+    for (int j = i,x=0; j<l ; ++j) {
+        x=x*10+str[j]-'0';
+        if(x>rem)break;
+        ret=min(ret,!!i+sol(j+1,rem-x));
+    }
+    return ret;
+}
+void print(int i,int rem){
+    if(i==l) return ;
+    int ret=sol(i,rem);
+    for (int j = i,x=0; j<l ; ++j) {
+        x=x*10+str[j]-'0';
+        if(x>rem)break;
+        if(ret==!!i+sol(j+1,rem-x)){
+            if(i)
+                cout<<'+';
+            cout<<x;
+            print(j+1,rem-x);
+            break;
+        }
+    }
+}
+int main() {
+    int h,t=0;
+    while(cin>>ws,cin.getline(str,N,'='),cin>>h,strcmp(str,"0")||h){
+        l=strlen(str);
+        fill(mem,mem+l,Hash());
+        cout<<++t<<". ";
+        if(sol(0,h)==1e9)
+            cout<<"IMPOSSIBLE\n";
+        else {
+            print(0,h);
+            cout<<'='<<h<<'\n';
+        }
+    }
+}
